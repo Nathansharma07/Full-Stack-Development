@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>04 · Bootstrap | NTC ePortfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--accent:#7b2fff;--accent2:#b380ff;--accent-dim:rgba(123,47,255,0.12);--bg:#080510;--bg2:#100820}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:#ece0f8;font-family:'Rajdhani',sans-serif;overflow-x:hidden}
+    #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.4}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,5,16,0.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(123,47,255,0.15);display:flex;align-items:center;justify-content:space-between;padding:0.7rem 2rem}
+    .nav-brand{font-family:'Bungee',cursive;font-size:1rem;color:var(--accent)}
+    .nav-back{font-family:'Space Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.45);text-decoration:none;padding:0.35rem 0.9rem;border:1px solid rgba(123,47,255,0.3);border-radius:5px;transition:all 0.25s}
+    .nav-back:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-dim)}
+    .hero{position:relative;z-index:1;min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem}
+    .hero-tag{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp 0.8s ease forwards;opacity:0}
+    .hero-num{font-family:'Bungee',cursive;font-size:clamp(5rem,18vw,12rem);color:var(--accent);opacity:0.07;line-height:1;position:absolute;pointer-events:none;user-select:none}
+    .hero-title{font-family:'Bungee',cursive;font-size:clamp(2rem,6vw,4.5rem);color:var(--accent);position:relative;z-index:1;text-shadow:0 0 40px rgba(123,47,255,0.55);animation:fadeUp 0.8s ease 0.15s forwards;opacity:0;margin-bottom:1rem}
+    .hero-sub{font-family:'Space Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.38);letter-spacing:0.22em;animation:fadeUp 0.8s ease 0.3s forwards;opacity:0}
+    .divider-line{width:80px;height:3px;background:var(--accent);border-radius:2px;margin:1.5rem auto;animation:lineGrow 0.8s ease 0.5s forwards;transform:scaleX(0);transform-origin:center}
+    @keyframes lineGrow{to{transform:scaleX(1)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+    main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 1.5rem 7rem}
+    .card{background:#fff;border-radius:14px;padding:2.5rem;margin-bottom:2.5rem;color:#080510;box-shadow:0 6px 40px rgba(123,47,255,0.15);border-top:4px solid var(--accent);opacity:0;transform:translateY(35px);transition:opacity 0.7s,transform 0.7s}
+    .card.visible{opacity:1;transform:translateY(0)}
+    .card-label{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;background:rgba(123,47,255,0.1);color:#5500cc;padding:0.28rem 0.7rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+    .card h3{font-family:'Rajdhani',sans-serif;font-size:1.45rem;font-weight:700;color:#080510;margin-bottom:1rem}
+    .card p{font-size:1.05rem;line-height:1.85;color:#100820;margin-bottom:1rem}
+    .card p:last-child{margin-bottom:0}
+    .card ul{margin:0.8rem 0 1rem 1.6rem}
+    .card ul li{font-size:1.05rem;line-height:1.85;color:#100820;margin-bottom:0.45rem}
+    .incode{background:#f2eeff;padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em;font-family:'Space Mono',monospace;color:#5500cc}
+    .code-wrapper{background:#1a1b26;border-radius:14px;margin-bottom:2.5rem;overflow:hidden;box-shadow:0 6px 45px rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.07);opacity:0;transform:translateY(35px);transition:opacity 0.7s 0.15s,transform 0.7s 0.15s}
+    .code-wrapper.visible{opacity:1;transform:translateY(0)}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.2rem;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06)}
+    .code-dots{display:flex;gap:0.4rem}
+    .code-dot{width:12px;height:12px;border-radius:50%}
+    .dot-r{background:#ff5f57}.dot-y{background:#ffbd2e}.dot-g{background:#28c840}
+    .code-filename{font-family:'Space Mono',monospace;font-size:0.68rem;color:rgba(255,255,255,0.38)}
+    .code-lang{font-family:'Space Mono',monospace;font-size:0.62rem;padding:0.18rem 0.55rem;border-radius:4px;background:rgba(123,47,255,0.2);color:var(--accent2)}
+    .code-wrapper pre{margin:0;padding:0;max-height:520px;overflow-y:auto}
+    .code-wrapper pre::-webkit-scrollbar{width:6px}
+    .code-wrapper pre::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:3px}
+    .code-wrapper pre code{font-family:'Space Mono',monospace!important;font-size:0.76rem!important;line-height:1.65!important;padding:1.5rem!important}
+    footer{position:relative;z-index:1;text-align:center;padding:3rem 2rem 4rem;border-top:1px solid rgba(123,47,255,0.12)}
+    .footer-name{font-family:'Bungee',cursive;font-size:1.1rem;color:var(--accent);margin-bottom:0.5rem}
+    footer p{font-family:'Space Mono',monospace;font-size:0.62rem;color:rgba(255,255,255,0.25);letter-spacing:0.14em}
+  </style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<nav>
+  <div class="nav-brand">04 · Bootstrap</div>
+  <a href="index.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-num">04</div>
+  <p class="hero-tag">CET138 ePortfolio &nbsp;·&nbsp; Section 04</p>
+  <h1 class="hero-title">Bootstrap</h1>
+  <div class="divider-line"></div>
+  <p class="hero-sub">RESPONSIVE GRID &nbsp;·&nbsp; COMPONENTS &nbsp;·&nbsp; UTILITIES</p>
+</section>
+
+<main>
+  <div class="card">
+    <span class="card-label">📖 Description</span>
+    <h3>What is Bootstrap?</h3>
+    <p>Bootstrap is the world's most popular open-source front-end CSS framework, originally created by developers at Twitter. It provides a comprehensive collection of pre-built responsive CSS classes, UI components, and JavaScript plugins that dramatically accelerate web development — allowing developers to build consistent, mobile-first layouts without writing large amounts of custom CSS from scratch.</p>
+    <p>Bootstrap's core feature is its <strong>12-column responsive grid system</strong>. Using classes such as <span class="incode">col-md-6</span> or <span class="incode">col-lg-4</span>, developers can define how content is distributed across different screen widths — automatically adapting layouts for mobile, tablet, and desktop with no manual media queries.</p>
+    <p>Bootstrap also ships with a rich set of ready-made components: <strong>Navbars</strong> (collapsible, responsive navigation bars), <strong>Cards</strong> (flexible content containers), <strong>Badges</strong> (status indicators), <strong>Progress Bars</strong>, <strong>Modals</strong>, <strong>Accordions</strong>, <strong>Dropdowns</strong>, <strong>Alerts</strong>, and many more. These follow consistent design patterns and accessibility standards out of the box.</p>
+    <p>Bootstrap's utility classes — such as <span class="incode">mt-3</span>, <span class="incode">text-center</span>, <span class="incode">d-flex</span>, and <span class="incode">justify-content-between</span> — allow precise control over spacing, alignment, and display directly in HTML. This approach is the same philosophy adopted by modern utility-first frameworks like Tailwind CSS. Bootstrap is used by millions of websites worldwide and is an essential tool in any front-end developer's toolkit.</p>
+  </div>
+
+  <div class="code-wrapper">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+      <span class="code-filename">bootstrap-dashboard.html</span>
+      <span class="code-lang">Bootstrap 5</span>
+    </div>
+    <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;Student Dashboard – Bootstrap 5&lt;/title&gt;
+  &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet" /&gt;
+&lt;/head&gt;
+&lt;body class="bg-light"&gt;
+
+  &lt;!-- Responsive Bootstrap Navbar --&gt;
+  &lt;nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm"&gt;
+    &lt;div class="container"&gt;
+      &lt;a class="navbar-brand fw-bold" href="#"&gt;&#x1F393; Student Portal&lt;/a&gt;
+      &lt;button class="navbar-toggler" type="button"
+        data-bs-toggle="collapse" data-bs-target="#navMenu"&gt;
+        &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;div class="collapse navbar-collapse" id="navMenu"&gt;
+        &lt;ul class="navbar-nav ms-auto"&gt;
+          &lt;li class="nav-item"&gt;&lt;a class="nav-link active" href="#"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
+          &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#courses"&gt;Courses&lt;/a&gt;&lt;/li&gt;
+          &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#grades"&gt;Grades&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+
+  &lt;div class="container my-4"&gt;
+
+    &lt;!-- Welcome Alert --&gt;
+    &lt;div class="alert alert-info d-flex align-items-center mb-4" role="alert"&gt;
+      &lt;span class="me-2 fs-5"&gt;&#x1F44B;&lt;/span&gt;
+      &lt;div&gt;Welcome back, &lt;strong&gt;Nathan&lt;/strong&gt;!
+        You have &lt;strong&gt;2 assignments&lt;/strong&gt; due soon.&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Stats Row – 4-column responsive grid --&gt;
+    &lt;div class="row g-3 mb-5"&gt;
+      &lt;div class="col-6 col-md-3"&gt;
+        &lt;div class="card text-center border-0 shadow-sm"&gt;
+          &lt;div class="card-body"&gt;
+            &lt;h2 class="text-primary fw-bold"&gt;4&lt;/h2&gt;
+            &lt;p class="text-muted small mb-0"&gt;Modules Enrolled&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="col-6 col-md-3"&gt;
+        &lt;div class="card text-center border-0 shadow-sm"&gt;
+          &lt;div class="card-body"&gt;
+            &lt;h2 class="text-success fw-bold"&gt;73%&lt;/h2&gt;
+            &lt;p class="text-muted small mb-0"&gt;Average Grade&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="col-6 col-md-3"&gt;
+        &lt;div class="card text-center border-0 shadow-sm"&gt;
+          &lt;div class="card-body"&gt;
+            &lt;h2 class="text-warning fw-bold"&gt;2&lt;/h2&gt;
+            &lt;p class="text-muted small mb-0"&gt;Pending Tasks&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="col-6 col-md-3"&gt;
+        &lt;div class="card text-center border-0 shadow-sm"&gt;
+          &lt;div class="card-body"&gt;
+            &lt;h2 class="text-danger fw-bold"&gt;6&lt;/h2&gt;
+            &lt;p class="text-muted small mb-0"&gt;Weeks Remaining&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- My Courses – Cards with Progress Bars --&gt;
+    &lt;h4 class="mb-3 fw-bold" id="courses"&gt;&#x1F4DA; My Courses&lt;/h4&gt;
+    &lt;div class="row g-3 mb-5"&gt;
+      &lt;div class="col-md-6"&gt;
+        &lt;div class="card border-0 shadow-sm h-100"&gt;
+          &lt;div class="card-body"&gt;
+            &lt;div class="d-flex justify-content-between align-items-start mb-2"&gt;
+              &lt;h5 class="card-title mb-0"&gt;CET138 – Full Stack Development&lt;/h5&gt;
+              &lt;span class="badge bg-primary"&gt;Active&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;p class="text-muted small mb-1"&gt;Dr. Smith | 20 Credits&lt;/p&gt;
+            &lt;div class="progress mb-3" style="height: 8px;"&gt;
+              &lt;div class="progress-bar bg-primary" role="progressbar"
+                   style="width: 50%"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a href="#" class="btn btn-sm btn-outline-primary"&gt;View Materials&lt;/a&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="col-md-6"&gt;
+        &lt;div class="card border-0 shadow-sm h-100"&gt;
+          &lt;div class="card-body"&gt;
+            &lt;div class="d-flex justify-content-between align-items-start mb-2"&gt;
+              &lt;h5 class="card-title mb-0"&gt;CET120 – Database Systems&lt;/h5&gt;
+              &lt;span class="badge bg-secondary"&gt;Active&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;p class="text-muted small mb-1"&gt;Prof. Jones | 20 Credits&lt;/p&gt;
+            &lt;div class="progress mb-3" style="height: 8px;"&gt;
+              &lt;div class="progress-bar bg-secondary" role="progressbar"
+                   style="width: 50%"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a href="#" class="btn btn-sm btn-outline-secondary"&gt;View Materials&lt;/a&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Grades Table --&gt;
+    &lt;h4 class="mb-3 fw-bold" id="grades"&gt;&#x1F4CA; My Grades&lt;/h4&gt;
+    &lt;div class="table-responsive shadow-sm rounded mb-5"&gt;
+      &lt;table class="table table-hover table-striped mb-0"&gt;
+        &lt;thead class="table-primary"&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Module&lt;/th&gt;&lt;th&gt;Assignment&lt;/th&gt;
+            &lt;th&gt;Score&lt;/th&gt;&lt;th&gt;Grade&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;
+            &lt;td&gt;CET138&lt;/td&gt;&lt;td&gt;Assignment 1 – ePortfolio&lt;/td&gt;
+            &lt;td&gt;–&lt;/td&gt;&lt;td&gt;–&lt;/td&gt;
+            &lt;td&gt;&lt;span class="badge bg-warning text-dark"&gt;Pending&lt;/span&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+            &lt;td&gt;CET120&lt;/td&gt;&lt;td&gt;Lab Report 1&lt;/td&gt;
+            &lt;td&gt;72%&lt;/td&gt;&lt;td&gt;&lt;strong&gt;B&lt;/strong&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;span class="badge bg-success"&gt;Graded&lt;/span&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </div>
+</main>
+
+<footer>
+  <p class="footer-name">NATHANTHECODER</p>
+  <p>CET138 – Full Stack Development &nbsp;·&nbsp; Assignment 1 ePortfolio &nbsp;·&nbsp; 2025</p>
+</footer>
+
+<script>
+  const canvas=document.getElementById("bg-canvas"),ctx=canvas.getContext("2d");
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+  resize();window.addEventListener("resize",resize);
+  class P{constructor(){this.reset()}reset(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.vx=(Math.random()-0.5)*0.4;this.vy=(Math.random()-0.5)*0.4;this.r=Math.random()*2+0.5;this.a=Math.random()*0.5+0.1}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height)this.reset()}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle="#7b2fff";ctx.globalAlpha=this.a;ctx.fill()}}
+  const ps=Array.from({length:100},()=>new P());
+  function loop(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=0;i<ps.length;i++){for(let j=i+1;j<ps.length;j++){const d=Math.hypot(ps[i].x-ps[j].x,ps[i].y-ps[j].y);if(d<120){ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.strokeStyle="#7b2fff";ctx.globalAlpha=(1-d/120)*0.1;ctx.lineWidth=0.5;ctx.stroke()}}ps[i].update();ps[i].draw()}ctx.globalAlpha=1;requestAnimationFrame(loop)}
+  loop();
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("visible")}),{threshold:0.1});
+  document.querySelectorAll(".card,.code-wrapper").forEach(el=>obs.observe(el));
+  document.addEventListener("DOMContentLoaded",()=>hljs.highlightAll());
+</script>
+</body>
+</html>

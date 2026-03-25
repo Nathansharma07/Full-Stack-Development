@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>01 · Full Stack Development | NTC ePortfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --accent:#ff3cac; --accent2:#ff80d5; --accent-dim:rgba(255,60,172,0.12);
+      --bg:#0f0709; --bg2:#1a0812;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:#f0e0ec;font-family:'Rajdhani',sans-serif;overflow-x:hidden}
+    #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.4}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,7,9,0.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,60,172,0.12);display:flex;align-items:center;justify-content:space-between;padding:0.7rem 2rem}
+    .nav-brand{font-family:'Bungee',cursive;font-size:1rem;color:var(--accent)}
+    .nav-back{font-family:'Space Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.45);text-decoration:none;padding:0.35rem 0.9rem;border:1px solid rgba(255,60,172,0.3);border-radius:5px;transition:all 0.25s}
+    .nav-back:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-dim)}
+
+    .hero{position:relative;z-index:1;min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem}
+    .hero-tag{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp 0.8s ease forwards;opacity:0}
+    .hero-num{font-family:'Bungee',cursive;font-size:clamp(5rem,18vw,12rem);color:var(--accent);opacity:0.08;line-height:1;position:absolute;pointer-events:none;user-select:none;animation:numFade 1.2s ease 0.2s forwards;transform:scale(1.2);filter:blur(2px)}
+    @keyframes numFade{to{opacity:0.08;transform:scale(1);filter:blur(0)}}
+    .hero-title{font-family:'Bungee',cursive;font-size:clamp(2rem,6vw,4.5rem);color:var(--accent);position:relative;z-index:1;text-shadow:0 0 40px rgba(255,60,172,0.5);animation:fadeUp 0.8s ease 0.15s forwards;opacity:0;margin-bottom:1rem}
+    .hero-sub{font-family:'Space Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.38);letter-spacing:0.22em;animation:fadeUp 0.8s ease 0.3s forwards;opacity:0}
+    .divider-line{width:80px;height:3px;background:var(--accent);border-radius:2px;margin:1.5rem auto;animation:lineGrow 0.8s ease 0.5s forwards;transform:scaleX(0);transform-origin:center}
+    @keyframes lineGrow{to{transform:scaleX(1)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+    main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 1.5rem 7rem}
+
+    .card{background:#fff;border-radius:14px;padding:2.5rem;margin-bottom:2.5rem;color:#1a0812;box-shadow:0 6px 40px rgba(255,60,172,0.15);border-top:4px solid var(--accent);opacity:0;transform:translateY(35px);transition:opacity 0.7s,transform 0.7s}
+    .card.visible{opacity:1;transform:translateY(0)}
+    .card-label{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;background:rgba(255,60,172,0.1);color:#cc0080;padding:0.28rem 0.7rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+    .card h3{font-family:'Rajdhani',sans-serif;font-size:1.45rem;font-weight:700;color:#1a0812;margin-bottom:1rem}
+    .card p{font-size:1.05rem;line-height:1.85;color:#2a0a20;margin-bottom:1rem}
+    .card p:last-child{margin-bottom:0}
+    .card ul{margin:0.8rem 0 1rem 1.6rem}
+    .card ul li{font-size:1.05rem;line-height:1.85;color:#2a0a20;margin-bottom:0.45rem}
+    .card ul li strong{color:#1a0812}
+
+    footer{position:relative;z-index:1;text-align:center;padding:3rem 2rem 4rem;border-top:1px solid rgba(255,60,172,0.12)}
+    .footer-name{font-family:'Bungee',cursive;font-size:1.1rem;color:var(--accent);margin-bottom:0.5rem}
+    footer p{font-family:'Space Mono',monospace;font-size:0.62rem;color:rgba(255,255,255,0.25);letter-spacing:0.14em}
+  </style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<nav>
+  <div class="nav-brand">01 · Full Stack Development</div>
+  <a href="index.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-num">01</div>
+  <p class="hero-tag">CET138 ePortfolio &nbsp;·&nbsp; Section 01</p>
+  <h1 class="hero-title">Full Stack Development</h1>
+  <div class="divider-line"></div>
+  <p class="hero-sub">OVERVIEW &nbsp;·&nbsp; TECHNOLOGIES &nbsp;·&nbsp; ARCHITECTURE</p>
+</section>
+
+<main>
+  <div class="card">
+    <span class="card-label">📖 Description</span>
+    <h3>Defining Full Stack Development</h3>
+    <p>Full Stack Development refers to the practice of building both the <strong>front-end (client-side)</strong> and <strong>back-end (server-side)</strong> components of a web application. A full stack developer is someone capable of working across all layers of a web project — from the visual interface that users interact with, to the database and server logic running behind the scenes.</p>
+    <p>The "stack" in full stack refers to the collection of technologies used to build a complete web application. Traditionally, this is divided into three layers:</p>
+    <ul>
+      <li><strong>Front-End (Client Side):</strong> Everything the user sees and interacts with directly in a web browser. Built using HTML, CSS, and JavaScript. Modern front-end development often uses frameworks like React, Vue, or Angular to create dynamic, responsive user interfaces.</li>
+      <li><strong>Back-End (Server Side):</strong> The logic, data processing, and server operations that happen behind the scenes, invisible to the user. Common technologies include Node.js, Python (Django/Flask), PHP, and Java Spring Boot. The back-end handles authentication, business logic, and database communication.</li>
+      <li><strong>Database Layer:</strong> Where data is stored persistently and retrieved on demand. This includes relational databases such as MySQL and PostgreSQL, and non-relational (NoSQL) databases such as MongoDB and Firebase Firestore.</li>
+    </ul>
+    <p>A popular full stack combination is the <strong>MERN Stack</strong> — MongoDB, Express.js, React, and Node.js — allowing developers to work entirely in JavaScript from front to back. Another long-standing stack is <strong>LAMP</strong> (Linux, Apache, MySQL, PHP), which has powered countless websites for decades.</p>
+    <p>Full stack developers are highly valued in the industry because they can take a project from concept to deployment independently, collaborating effectively with both design teams and infrastructure engineers. Their versatility makes them indispensable in startups and agile development teams where one developer may need to take ownership of an entire feature.</p>
+    <p>In the context of this module (CET138), we are building foundational skills in front-end technologies — HTML, CSS, Bootstrap, and JavaScript — which form the critical client-side layer of any full stack application. Mastering these fundamentals is the essential first step towards becoming a well-rounded full stack developer.</p>
+  </div>
+</main>
+
+<footer>
+  <p class="footer-name">NATHANTHECODER</p>
+  <p>CET138 – Full Stack Development &nbsp;·&nbsp; Assignment 1 ePortfolio &nbsp;·&nbsp; 2025</p>
+</footer>
+
+<script>
+  const canvas=document.getElementById("bg-canvas"),ctx=canvas.getContext("2d");
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+  resize();window.addEventListener("resize",resize);
+  class P{
+    constructor(){this.reset()}
+    reset(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.vx=(Math.random()-0.5)*0.4;this.vy=(Math.random()-0.5)*0.4;this.r=Math.random()*2+0.5;this.a=Math.random()*0.5+0.1}
+    update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height)this.reset()}
+    draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle="#ff3cac";ctx.globalAlpha=this.a;ctx.fill()}
+  }
+  const ps=Array.from({length:100},()=>new P());
+  function loop(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<ps.length;i++){
+      for(let j=i+1;j<ps.length;j++){const d=Math.hypot(ps[i].x-ps[j].x,ps[i].y-ps[j].y);if(d<120){ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.strokeStyle="#ff3cac";ctx.globalAlpha=(1-d/120)*0.1;ctx.lineWidth=0.5;ctx.stroke()}}
+      ps[i].update();ps[i].draw()
+    }
+    ctx.globalAlpha=1;requestAnimationFrame(loop)
+  }
+  loop();
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("visible")}),{threshold:0.1});
+  document.querySelectorAll(".card").forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
